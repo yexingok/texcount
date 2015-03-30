@@ -1,0 +1,25 @@
+machine:
+    environment:
+        USER: $DOCKER_USER
+    services:
+        - docker
+    timezone:
+        Asia/Shanghai
+
+dependencies:
+    override:
+        - docker info
+        - docker build --no-cache -t $DOCKER_USER/texcount  .
+
+test:
+    override:
+        - docker run -d -p 80:80 $DOCKER_USER/texcount  ; sleep 5
+        - curl --retry 5 --retry-delay 5 -v http://localhost/
+
+deployment:
+    hub:
+        branch: master
+        commands: 
+            - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+            - docker push $DOCKER_USER/texcount 
+
