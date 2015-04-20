@@ -12,7 +12,7 @@ logs:
 ip:
 	docker inspect --format '{{ .NetworkSettings.IPAddress }}' $(CONTAINERNAME)
 run:
-	docker run -d --name $(CONTAINERNAME) -p 80:80  $(USER)/$(CONTAINERNAME) 
+	docker run -d --restart=always --name $(CONTAINERNAME) -p 8888:80  $(USER)/$(CONTAINERNAME) 
 start: 
 	docker start $(CONTAINERNAME)
 stop:
