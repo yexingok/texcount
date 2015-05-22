@@ -9,12 +9,11 @@ machine:
 dependencies:
     override:
         - docker info
-        - docker build --no-cache -t $DOCKER_USER/texcount  .
+        - make rebuild
 
 test:
     override:
-        - docker run -d -p 8888:80 $DOCKER_USER/texcount  ; sleep 5
-        - curl --retry 5 --retry-delay 5 -v http://localhost:8888/
+        - make test
 
 deployment:
     hub:

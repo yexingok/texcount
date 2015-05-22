@@ -1,0 +1,21 @@
+image: centos:centos6
+
+services:
+    - mysql
+
+env:
+    - MYENV = "hello"
+
+install:
+    - echo $MYENV
+    - echo "In install section"
+
+before_script:
+    - echo $MYENV
+    - echo "In before_script build section"
+    - make rebuild
+
+script:
+    - echo $MYENV
+    - echo "In script section and run test:"
+    - make test

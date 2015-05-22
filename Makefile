@@ -1,4 +1,5 @@
 CONTAINERNAME=texcount
+PORT=8888
 USER=$(shell whoami)
 
 build:
@@ -12,11 +13,17 @@ logs:
 ip:
 	docker inspect --format '{{ .NetworkSettings.IPAddress }}' $(CONTAINERNAME)
 run:
-	docker run -d --restart=always --name $(CONTAINERNAME) -p 8888:80  $(USER)/$(CONTAINERNAME) 
+	docker run -d --restart=always --name $(CONTAINERNAME) -p $(PORT):80  $(USER)/$(CONTAINERNAME) 
 start: 
 	docker start $(CONTAINERNAME)
 stop:
 	docker stop  $(CONTAINERNAME)
-destroy:
-	docker stop $(CONTAINERNAME) 
+test: run 
+	docker ps
+	sleep 5
+	curl --retry 5 --retry-delay 5 -v http://localhost:$(PORT)/
+
+.PHONY: clean
+
+clean: stop
 	docker rm $(CONTAINERNAME) 
